@@ -1,1 +1,4 @@
-examples/
+examples
+2-nulldump/*
+!2-nulldump/Makefile
+!2-nulldump/nulldump.c
