@@ -30,24 +30,25 @@ static ssize_t nulldump_read(struct file *file, char __user *buf,
 static ssize_t nulldump_write(struct file *file, const char __user *buf,
 			      size_t len, loff_t *off)
 {
-	unsigned char *kbuf;
+	unsigned char kbuf[1024];
+	size_t chunk, remaining = len;
 
 	pr_info("nulldump: write | pid=%d comm=%s | %zu bytes\n",
 		current->pid, current->comm, len);
 
-	kbuf = kmalloc(len, GFP_KERNEL);
-	if (!kbuf)
-		return -ENOMEM;
+	while (remaining > 0) {
+		chunk = min(remaining, sizeof(kbuf));
 
-	if (copy_from_user(kbuf, buf, len)) {
-		kfree(kbuf);
-		return -EFAULT;
+		if (copy_from_user(kbuf, buf, chunk))
+			return -EFAULT;
+
+		print_hex_dump(KERN_INFO, "nulldump: ", DUMP_PREFIX_OFFSET,
+			       16, 1, kbuf, chunk, true);
+
+		buf += chunk;
+		remaining -= chunk;
 	}
 
-	print_hex_dump(KERN_INFO, "nulldump: ", DUMP_PREFIX_OFFSET,
-		       16, 1, kbuf, len, true);
-
-	kfree(kbuf);
 	return len;
 }
 
