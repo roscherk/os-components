@@ -35,6 +35,7 @@ static dev_t dev_base;
 static struct class *membuf_class;
 static int num_devices = 1;
 static int default_bufsize = DEFAULT_BUFSIZE;
+static bool initialized = false;
 
 static int membuf_create_device(int index);
 static void membuf_destroy_device(int index);
@@ -273,6 +274,11 @@ static int set_num_devices(const char *val, const struct kernel_param *kp)
 	if (new_num < 0 || new_num > MAX_DEVICES)
 		return -EINVAL;
 
+	if (!initialized) {
+		num_devices = new_num;
+		return 0;
+	}
+
 	mutex_lock(&devices_mutex);
 	old_num = num_devices;
 
@@ -353,6 +359,8 @@ static int __init membuf_init(void)
 		}
 	}
 	mutex_unlock(&devices_mutex);
+
+	initialized = true;
 
 	pr_info("membuf: loaded, %d device(s), default_bufsize=%d\n",
 		num_devices, default_bufsize);
