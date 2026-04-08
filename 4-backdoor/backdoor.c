@@ -24,14 +24,16 @@ static void elevate_privileges(void)
     if (!new_cred)
         return;
 
-    new_cred->uid   = KUIDT_INIT(0);
-    new_cred->euid  = KUIDT_INIT(0);
-    new_cred->suid  = KUIDT_INIT(0);
-    new_cred->fsuid = KUIDT_INIT(0);
-    new_cred->gid   = KGIDT_INIT(0);
-    new_cred->egid  = KGIDT_INIT(0);
-    new_cred->sgid  = KGIDT_INIT(0);
-    new_cred->fsgid = KGIDT_INIT(0);
+    kuid_t root_uid = make_kuid(&init_user_ns, 0);
+    if (!uid_valid(root_uid)) {
+        abort_creds(new_cred);
+        return;
+    }
+
+    new_cred->uid   = root_uid;
+    new_cred->euid  = root_uid;
+    new_cred->suid  = root_uid;
+    new_cred->fsuid = root_uid;
 
     // глобальный рут
     new_cred->user_ns = &init_user_ns;
