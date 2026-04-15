@@ -1,0 +1,7 @@
+membuf                 32768  0
+/dev/membuf0
+/dev/membuf1
+/dev/membuf2
+/dev/membuf3
+--- cycle 1 ---
+--- cycle 2 ---

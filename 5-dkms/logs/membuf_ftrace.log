@@ -1,0 +1,18 @@
+4096
+         python3-1918    [002] .....  1489.532510: membuf_open <-chrdev_open
+         python3-1918    [002] .....  1489.532535: membuf_write <-vfs_write
+         python3-1918    [002] .....  1489.532897: membuf_llseek <-ksys_lseek
+         python3-1918    [002] .....  1489.532913: membuf_read <-vfs_read
+         python3-1918    [002] .....  1489.532974: membuf_release <-__fput
+             cat-1919    [006] .....  1489.578865: bufsize_show <-dev_attr_show
+ debug-ftrace.sh-1905    [001] .....  1489.586938: set_num_devices <-param_attr_store
+ debug-ftrace.sh-1905    [001] .....  1489.587090: membuf_create_device <-set_num_devices
+ debug-ftrace.sh-1905    [001] .....  1489.592868: set_num_devices <-param_attr_store
+ debug-ftrace.sh-1905    [001] .....  1489.592872: membuf_destroy_device <-set_num_devices
+  3) + 12.218 us   |  membuf_open [membuf]();
+  3)   6.881 us    |  membuf_write [membuf]();
+  3)   0.789 us    |  membuf_release [membuf]();
+  2)   4.092 us    |  membuf_open [membuf]();
+  2)   2.473 us    |  membuf_llseek [membuf]();
+  2)   4.062 us    |  membuf_read [membuf]();
+  2)   0.489 us    |  membuf_release [membuf]();

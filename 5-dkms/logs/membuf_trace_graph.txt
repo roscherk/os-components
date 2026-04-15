@@ -1,0 +1,11 @@
+# tracer: function_graph
+#
+# CPU  DURATION                  FUNCTION CALLS
+# |     |   |                     |   |   |   |
+  3) + 12.218 us   |  membuf_open [membuf]();
+  3)   6.881 us    |  membuf_write [membuf]();
+  3)   0.789 us    |  membuf_release [membuf]();
+  2)   4.092 us    |  membuf_open [membuf]();
+  2)   2.473 us    |  membuf_llseek [membuf]();
+  2)   4.062 us    |  membuf_read [membuf]();
+  2)   0.489 us    |  membuf_release [membuf]();
