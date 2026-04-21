@@ -1,0 +1,16 @@
+# tracer: function
+#
+# entries-in-buffer/entries-written: 4/4   #P:16
+#
+#                                _-----=> irqs-off/BH-disabled
+#                               / _----=> need-resched
+#                              | / _---=> hardirq/softirq
+#                              || / _--=> preempt-depth
+#                              ||| / _-=> migrate-disable
+#                              |||| /     delay
+#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+#              | |         |   |||||     |         |
+              dd-2040    [010] .....  2646.400910: membuf_open <-chrdev_open
+              dd-2040    [010] .....  2646.401042: membuf_write <-vfs_write
+              dd-2051    [005] .....  2647.168583: membuf_open <-chrdev_open
+              dd-2051    [005] .....  2647.168682: membuf_read <-vfs_read

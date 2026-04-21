@@ -1,0 +1,5 @@
+[ 1013.522954] workqueue: gc_worker [nf_conntrack] hogged CPU for >10000us 35 times, consider switching to WQ_UNBOUND
+[ 1873.710958] workqueue: gc_worker [nf_conntrack] hogged CPU for >10000us 67 times, consider switching to WQ_UNBOUND
+[ 2025.233566] kworker/2:2 (404) used greatest stack depth: 20504 bytes left
+[ 2625.678190] membuf: loaded, 2 device(s), default_bufsize=4096
+[ 2633.302564] NOTICE: Automounting of tracing to debugfs is deprecated and will be removed in 2030

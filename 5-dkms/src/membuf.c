@@ -35,7 +35,6 @@ static dev_t dev_base;
 static struct class *membuf_class;
 static int num_devices = 1;
 static int default_bufsize = DEFAULT_BUFSIZE;
-static int leak_test = 0;
 static bool initialized = false;
 
 static int membuf_create_device(int index);
@@ -326,9 +325,6 @@ MODULE_PARM_DESC(num_devices, "Number of membuf devices");
 module_param(default_bufsize, int, 0644);
 MODULE_PARM_DESC(default_bufsize, "Default buffer size for new devices (bytes)");
 
-module_param(leak_test, int, 0444);
-MODULE_PARM_DESC(leak_test, "If non-zero, intentionally leak this many bytes at init (kmemleak verification only)");
-
 static int __init membuf_init(void)
 {
 	int ret, i;
@@ -365,14 +361,6 @@ static int __init membuf_init(void)
 	mutex_unlock(&devices_mutex);
 
 	initialized = true;
-
-	if (leak_test > 0) {
-		void *leaked = kzalloc(leak_test, GFP_KERNEL);
-		if (leaked)
-			pr_warn("membuf: intentionally leaking %d bytes (kmemleak test)\n",
-				leak_test);
-		/* intentionally not freed — kmemleak should report this */
-	}
 
 	pr_info("membuf: loaded, %d device(s), default_bufsize=%d\n",
 		num_devices, default_bufsize);
