@@ -1,0 +1,18 @@
+# udev rule: mount one specific USB flash drive on add, unmount on remove.
+# Edit idVendor / idProduct / serial to match your drive:
+#   lsusb
+#   udevadm info --attribute-walk --name=/dev/sdX1  (look for SUBSYSTEMS=="usb", DRIVERS=="usb")
+
+SUBSYSTEM!="block", GOTO="usb_flash_end"
+ACTION!="add|remove", GOTO="usb_flash_end"
+
+ACTION=="add", ENV{ID_FS_USAGE}=="filesystem", \
+    ATTRS{idVendor}=="058f", ATTRS{idProduct}=="6387", ATTRS{serial}=="7B4C1A2F", \
+    RUN+="/usr/bin/logger -t udev 'USB drive added: %k'"
+
+ACTION=="remove", \
+    ENV{ID_VENDOR_ID}=="058f", ENV{ID_MODEL_ID}=="6387", ENV{ID_SERIAL_SHORT}=="7B4C1A2F", \
+    RUN+="/usr/bin/wall 'USB drive removed: %k'", \
+    RUN+="/usr/bin/logger -t udev 'USB drive removed: %k'"
+
+LABEL="usb_flash_end"
