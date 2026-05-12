@@ -20,11 +20,24 @@ static unsigned int netfilter_hook_fn(void *priv,
 	struct iphdr *iph;
 	struct tcphdr *th;
 
+	if (!skb)
+		return NF_ACCEPT;
+
+	if (!pskb_may_pull(skb, sizeof(struct iphdr)))
+		return NF_ACCEPT;
+
 	iph = ip_hdr(skb);
+	if (iph->ihl < 5)
+		return NF_ACCEPT;
+
 	if (iph->protocol != IPPROTO_TCP)
 		return NF_ACCEPT;
 
-	th = tcp_hdr(skb);
+	if (!pskb_may_pull(skb, iph->ihl * 4 + sizeof(struct tcphdr)))
+		return NF_ACCEPT;
+
+	iph = ip_hdr(skb);
+	th = (struct tcphdr *)((u8 *)iph + iph->ihl * 4);
 
 	if (filter_port != 0 && ntohs(th->dest) == filter_port) {
 		pr_info("netfilter: DROPPING packet to port %u\n", filter_port);
